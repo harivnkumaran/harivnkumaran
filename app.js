@@ -30,10 +30,7 @@ class App {
 
         const ambient = new THREE.HemisphereLight(0xFFFFFF, 0xAAAAAA, 0.8);
         this.scene.add(ambient);
-		this.listener = new THREE.AudioListener();
-this.camera.add(this.listener); // Attach to camera
-this.addAmbientSound();         // Call function to play ambience
-
+		
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -71,33 +68,6 @@ this.addAmbientSound();         // Call function to play ambience
                 self.boardData = obj;
             });
     }
-	addAmbientSound() {
-    const sound = new THREE.Audio(this.listener);
-    const audioLoader = new THREE.AudioLoader();
-
-    audioLoader.load('./assets/sounds/ambience.mp3', (buffer) => {
-        sound.setBuffer(buffer);
-        sound.setLoop(true);
-        sound.setVolume(0.5);
-
-        const resumeAudio = () => {
-            if (this.listener.context.state === 'suspended') {
-                this.listener.context.resume();
-            }
-            sound.play();
-            document.removeEventListener('click', resumeAudio);
-            document.removeEventListener('keydown', resumeAudio);
-        };
-
-        // Wait for user interaction to resume audio
-        document.addEventListener('click', resumeAudio);
-        document.addEventListener('keydown', resumeAudio);
-    }, undefined, (err) => {
-        console.error('Failed to load ambient sound:', err);
-    });
-}
-
-
 
     setEnvironment() {
         const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
