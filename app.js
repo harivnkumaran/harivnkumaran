@@ -87,7 +87,7 @@ class App {
 		const audioLoader = new THREE.AudioLoader();
 
 		this.ambientSound = new THREE.Audio(this.listener);
-		audioLoader.load('./assets/audio/Aimbient.mp3', (buffer) => {
+		audioLoader.load('./assets/audio/ambience.mp3', (buffer) => {
 			this.ambientSound.setBuffer(buffer);
 			this.ambientSound.setLoop(true);
 			this.ambientSound.setVolume(0.3);
@@ -107,7 +107,7 @@ class App {
 		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 		pmremGenerator.compileEquirectangularShader();
 
-		loader.load('./assets/hdr/cobblestone_street_night.hdr', (texture) => {
+		loader.load('./assets/hdr/venice_sunset_1k.hdr', (texture) => {
 			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 			pmremGenerator.dispose();
 			this.scene.environment = envMap;
@@ -127,15 +127,15 @@ class App {
 			model.traverse(child => {
 				if (child.isMesh) {
 					if (child.name.includes("Wall")) {
-						child.material = new THREE.MeshStandardMaterial({ color: 0xadd8e6 });
+						child.material = new THREE.MeshStandardMaterial({ color: 0xd9d9d9 });
 					} else if (child.name.includes("Floor")) {
-						child.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+						child.material = new THREE.MeshStandardMaterial({ color: 0xa67c52 });
 					} else if (child.name.includes("Stair")) {
-						child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+						child.material = new THREE.MeshStandardMaterial({ color: 0x4a4a4a });
 					} else if (child.material.name.indexOf('Glass') !== -1) {
 						child.material.transparent = true;
-						child.material.opacity = 0.15;
-						child.material.color.set(0x000000);
+						child.material.opacity = 0.1;
+						child.material.color.set(0xb3e5fc);
 					} else if (child.name.indexOf("PROXY") !== -1) {
 						child.material.visible = false;
 						this.proxy = child;
@@ -271,4 +271,3 @@ class App {
 }
 
 export { App };
-
