@@ -91,38 +91,39 @@ class App {
     }
 
     loadCollege() {
-        const loader = new GLTFLoader().setPath(this.assetsPath);
-        const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath('./libs/three/js/draco/');
-        loader.setDRACOLoader(dracoLoader);
-
-        const self = this;
-
-        loader.load('college.glb', function (gltf) {
-            const college = gltf.scene.children[0];
-            self.scene.add(college);
-
-            college.traverse(function (child) {
-                if (child.isMesh) {
-                    console.log(child.name);
-                    if (child.name.includes("PROXY")) {
-                        child.material.visible = false;
-                        self.proxy = child;
-                    } else if (child.material.name.includes('Glass')) {
-                        child.material.opacity = 0.1;
-                        child.material.transparent = true;
-                    } else if (child.material.name.includes("SkyBox")) {
-                        const mat1 = child.material;
-                        const mat2 = new THREE.MeshBasicMaterial({ map: mat1.map });
-                        child.material = mat2;
-                        mat1.dispose();
-                    } else if (child.name.includes("Floor")) {
-                        child.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-                    } else if (child.name.includes("Stair")) {
-                        child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-                    }
-                }
-            });
+       const loader = new GLTFLoader().setPath(this.assetsPath);
+			const draco = new DRACOLoader();
+			draco.setDecoderPath('./libs/three/js/draco/');
+			loader.setDRACOLoader(draco);
+	   
+			loader.load('college.glb', (gltf) => {
+				const model = gltf.scene.children[0];
+				this.scene.add(model);
+	   
+				model.traverse(child => {
+					if (child.isMesh) {
+						if (child.name.includes("Wall")) {
+							child.material = new THREE.MeshStandardMaterial({ color: 0xadd8e6 });
+						} else if (child.name.includes("Floor")) {
+							child.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+						} else if (child.name.includes("Stair")) {
+							child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+						} else if (child.material.name.indexOf('Glass') !== -1) {
+							child.material.transparent = true;
+							child.material.opacity = 0.15;
+							child.material.color.set(0x000000);
+						} else if (child.name.indexOf("PROXY") !== -1) {
+							child.material.visible = false;
+							this.proxy = child;
+						}
+					}
+				});
+	   
+				this.setupXR();
+				this.loadingBar.visible = false;
+				this.setEnvironment();
+			});
+		}
 
             const door1 = college.getObjectByName("LobbyShop_Door__1_");
             const door2 = college.getObjectByName("LobbyShop_Door__2_");
