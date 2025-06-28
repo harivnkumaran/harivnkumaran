@@ -121,25 +121,26 @@ class App {
 	   
 				this.setupXR();
 				this.loadingBar.visible = false;
-				this.setEnvironment();
-			});
-		}
+                this.setEnvironment();
 
-            const door1 = college.getObjectByName("LobbyShop_Door__1_");
-            const door2 = college.getObjectByName("LobbyShop_Door__2_");
-            const pos = door1.position.clone().sub(door2.position).multiplyScalar(0.5).add(door2.position);
-            const obj = new THREE.Object3D();
-            obj.name = "LobbyShop";
-            obj.position.copy(pos);
-            college.add(obj);
-
-            self.loadingBar.visible = false;
-            self.setupXR();
-        }, function (xhr) {
-            self.loadingBar.progress = (xhr.loaded / xhr.total);
-        }, function (error) {
-            console.log('An error happened');
-        });
+                // Add the following code inside the loader.load callback, after the model is loaded
+                var door1 = model.getObjectByName("LobbyShop_Door__1_");
+                var door2 = model.getObjectByName("LobbyShop_Door__2_");
+                if (door1 && door2) {
+                    var pos = door1.position.clone().sub(door2.position).multiplyScalar(0.5).add(door2.position);
+                    var obj = new THREE.Object3D();
+                    obj.name = "LobbyShop";
+                    obj.position.copy(pos);
+                    model.add(obj);
+                }
+            },
+            (xhr) => {
+                this.loadingBar.progress = (xhr.loaded / xhr.total);
+            },
+            (error) => {
+                console.log('An error happened');
+            }
+        );
     }
 
     setupXR() {
