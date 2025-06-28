@@ -78,12 +78,25 @@ this.addAmbientSound();         // Call function to play ambience
     audioLoader.load('./assets/sounds/ambience.mp3', (buffer) => {
         sound.setBuffer(buffer);
         sound.setLoop(true);
-        sound.setVolume(0.5); // Adjust volume as needed
-        sound.play();
+        sound.setVolume(0.5);
+
+        const resumeAudio = () => {
+            if (this.listener.context.state === 'suspended') {
+                this.listener.context.resume();
+            }
+            sound.play();
+            document.removeEventListener('click', resumeAudio);
+            document.removeEventListener('keydown', resumeAudio);
+        };
+
+        // Wait for user interaction to resume audio
+        document.addEventListener('click', resumeAudio);
+        document.addEventListener('keydown', resumeAudio);
     }, undefined, (err) => {
         console.error('Failed to load ambient sound:', err);
     });
 }
+
 
 
     setEnvironment() {
