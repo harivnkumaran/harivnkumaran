@@ -106,9 +106,9 @@ class App {
 					if (child.name.includes("Wall")) {
 						child.material = new THREE.MeshStandardMaterial({ color: 0xadd8e6 });
 					} else if (child.name.includes("Floor")) {
-						child.material = new THREE.MeshStandardMaterial({ color: 0xdddddd });
+						child.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 					} else if (child.name.includes("Stair")) {
-						child.material = new THREE.MeshStandardMaterial({ color: 0xcd853f });
+						child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 					} else if (child.material.name.indexOf('Glass') !== -1) {
 						child.material.transparent = true;
 						child.material.opacity = 0.15;
