@@ -7,7 +7,7 @@ import { LoadingBar } from './libs/LoadingBar.js';
 import { CanvasUI } from './libs/CanvasUI.js';
 import { GazeController } from './libs/GazeController.js';
 import { XRControllerModelFactory } from './libs/three/jsm/XRControllerModelFactory.js';
-import { VRButton } from './libs/three/jsm/webxr/VRButton.js'; // ✅ VRButton as a function
+import { VRButton } from './libs/three/jsm/webxr/VRButton.js'; // ✅ Official VRButton
 
 class App {
 	constructor() {
@@ -37,7 +37,7 @@ class App {
 		container.appendChild(this.renderer.domElement);
 
 		this.renderer.xr.enabled = true;
-		document.body.appendChild(VRButton(this.renderer)); // ✅ Corrected usage
+		document.body.appendChild(VRButton.createButton(this.renderer)); // ✅ Correct usage
 
 		this.stats = new Stats();
 		container.appendChild(this.stats.dom);
