@@ -4,7 +4,7 @@ import { DRACOLoader } from './libs/three/jsm/DRACOLoader.js';
 import { RGBELoader } from './libs/three/jsm/RGBELoader.js';
 import { Stats } from './libs/stats.module.js';
 import { LoadingBar } from './libs/LoadingBar.js';
-import {VRButton} from './libs/VRButton.js';
+import { createButton } from './libs/VRButton.js'; // ✅ FIXED: importing function directly
 import { CanvasUI } from './libs/CanvasUI.js';
 import { GazeController } from './libs/GazeController.js';
 import { XRControllerModelFactory } from './libs/three/jsm/XRControllerModelFactory.js';
@@ -37,7 +37,7 @@ class App {
 		container.appendChild(this.renderer.domElement);
 
 		this.renderer.xr.enabled = true;
-		document.body.appendChild(VRButton.createButton(this.renderer));
+		document.body.appendChild(createButton(this.renderer)); // ✅ FIXED: use imported function
 
 		this.stats = new Stats();
 		container.appendChild(this.stats.dom);
@@ -52,7 +52,7 @@ class App {
 		this.spotLight.position.set(0, 10, 0);
 		this.spotLight.angle = Math.PI / 4;
 		this.spotLight.penumbra = 0.5;
-	this.spotLight.visible = true;
+		this.spotLight.visible = true;
 		this.scene.add(this.spotLight);
 
 		this.renderer.domElement.setAttribute('tabindex', '0');
@@ -60,7 +60,7 @@ class App {
 		window.addEventListener('keydown', (e) => {
 			if (e.key === 'l' || e.key === 'L') this.toggleLight();
 		});
-		window.addEventListener('resize', this.resize.bind(this));	
+		window.addEventListener('resize', this.resize.bind(this));
 
 		this.origin = new THREE.Vector3();
 		this.workingVec3 = new THREE.Vector3();
@@ -170,7 +170,10 @@ class App {
 
 	buildControllers(parent) {
 		const controllerFactory = new XRControllerModelFactory();
-		const lineGeom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)]);
+		const lineGeom = new THREE.BufferGeometry().setFromPoints([
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(0, 0, -1)
+		]);
 		const line = new THREE.Line(lineGeom);
 
 		const controllers = [];
